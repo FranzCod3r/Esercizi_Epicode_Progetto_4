@@ -172,9 +172,11 @@ print("\nFile salvato: vendite_analizzate.csv")
 
 # 1) Grafico a barre: incasso totale per ogni negozio
 incasso_per_negozio = DATA.groupby("Negozio")["Incasso"].sum().sort_values(ascending=False)
+n = len(incasso_per_negozio)
+colors = plt.cm.summer(np.linspace(0.2, 0.9, n)) # gradiente colore
 
 plt.figure(figsize=(8,5))
-incasso_per_negozio.plot(kind="bar", color='blue')
+incasso_per_negozio.plot(kind="bar", color=colors)
 plt.title("Incasso totale per negozio")
 plt.ylabel("Incasso (€)")
 plt.xlabel("Negozio")
@@ -190,8 +192,12 @@ incasso_per_prodotto = incasso_per_prodotto.sort_values(ascending=False)
 
 plt.figure(figsize=(7,7))
 colori = plt.cm.tab20.colors #palette colori fette
-plt.pie(incasso_per_prodotto, labels=incasso_per_prodotto.index, autopct='%1.1f%%',
-        startangle=140, colors=colori)
+plt.pie(incasso_per_prodotto, labels=incasso_per_prodotto.index, 
+        autopct='%1.1f%%',
+        startangle=140, 
+        colors=colori,
+        wedgeprops={"width": 0.3} # donut graph
+)
 plt.title("Percentuale incassi per prodotto")
 plt.tight_layout()
 plt.show()
@@ -202,7 +208,7 @@ incasso_giornaliero = DATA.groupby("Data")["Incasso"].sum().sort_index()
 
 plt.figure(figsize=(10,5))
 plt.plot(incasso_giornaliero.index, incasso_giornaliero.values, marker='o', linestyle='-',
-         color='C1')
+         color="orange")
 plt.title("Andamento incassi totali della catena")
 plt.xlabel("Data")
 plt.ylabel("Incasso totale (€)")
